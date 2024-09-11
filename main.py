@@ -18,7 +18,7 @@ def main():
 
 # Connect to SQLite DB // using sqlalchemy
 def get_sql_engine(db_uri):
-    try:        
+    try:
         engine = create_engine(db_uri)
         return engine
     except:
@@ -50,8 +50,11 @@ def pandas_export_data_sqlalchemy(set_engine):
     # END - Transformation of DataFrame
 
     # Export to CSV
-    final_df.to_csv(CSV_DIR / 'pandas_final_data.csv', index=False, sep=';')
-    
+    try:
+        final_df.to_csv(CSV_DIR / 'pandas_final_data.csv', index=False, sep=';')
+        print('Successfully created pandas_final_data.csv')
+    except:
+        raise Exception
 
 # START - Process for exporting data using Pure SQL
 def sql_export_data_sqlalchemy(set_engine):
@@ -69,7 +72,11 @@ def sql_export_data_sqlalchemy(set_engine):
         GROUP BY s.customer_id, o.item_id 
     '''
     final_df = pd.read_sql(total_quantities_query, set_engine)
-    final_df.to_csv(CSV_DIR / 'sql_final_data.csv', index=False, sep=';')
+    try:
+        final_df.to_csv(CSV_DIR / 'sql_final_data.csv', index=False, sep=';')
+        print('Successfully created sql_final_data.csv')
+    except:
+        raise Exception
 # END - Process for exporting data using Pure SQL
 
 if __name__ == "__main__":
